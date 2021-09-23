@@ -1,0 +1,44 @@
+{
+  "name": "json2canvas",
+  "version": "0.2.0",
+  "description": "generate image with json data by canvas",
+  "main": "dist/json2canvas.umd.min.js",
+  "scripts": {
+    "build": "webpack --mode=production",
+    "build:dev": "webpack --mode=development --watch",
+    "demo:dev": "demosify --serve",
+    "demo:prod": "demosify --prod"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangqh/json2canvas.git"
+  },
+  "keywords": [
+    "canvas",
+    "json",
+    "image",
+    "generate",
+    "json2canvas",
+    "html2canvas"
+  ],
+  "author": "wangqh <wpqh@qq.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wangqh/json2canvas/issues"
+  },
+  "homepage": "https://github.com/wangqh/json2canvas#readme",
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
+    "@demosify/core": "^0.6.0",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-transform-async-to-promises": "^0.8.15",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "canvas": "^2.6.1"
+  }
+}

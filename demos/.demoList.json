@@ -1,0 +1,10 @@
+[
+  {
+    "label": "水印模板预览",
+    "src": "watermark-template-preview"
+  },
+  {
+    "label": "H5水印渲染",
+    "src": "watermark-render"
+  }
+]
