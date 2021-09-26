@@ -3,6 +3,15 @@
   "version": "1.0.0-alpha.0",
   "description": "generate image with json data by canvas",
   "main": "dist/json2canvas.umd.min.js",
+  "directories": {
+    "dist": "dist"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development --watch",
