@@ -1,6 +1,6 @@
 {
   "name": "html-json2canvas",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0",
   "description": "generate image with json data by canvas",
   "main": "dist/json2canvas.umd.min.js",
   "directories": {
