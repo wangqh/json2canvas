@@ -19,59 +19,6 @@ const formatCoord = function({top, left, width, height, right, bottom}, {width: 
 }
 
 /**
- * 获取文本宽度/或者多行文本配置
- *
- * @param {Object} {
- *   fontWeight,
- *   fontSize,
- *   width,
- *   text,
- *   top,
- *   left,
- *   lineHeight
- * }
- * @param {string} [render='html']
- * @returns {Object|Array}
- */
-// const getTextWidth = function({
-//   fontWeight,
-//   fontSize,
-//   width,
-//   text,
-//   top,
-//   left,
-//   lineHeight
-// }, render = 'html') {
-//   const Render = isFunction(render) ? render : (Renders[render] || Renders.html);
-//   render = new Render(10000,  10000, {});
-//   const ctx = render.ctx;
-  
-//   ctx.font = [fontWeight, fontSize ? fontSize + 'px' : '', 'Arial'].filter(v => v).join(' ');
-//   if(!width) {
-//     const metrics = ctx.measureText(text);
-//     return metrics;
-//   }
-
-//   var arrText = text.split('');
-//   var line = '';
-//   var result = [];
-//   for (var n = 0; n < arrText.length; n++) {
-//     var testLine = line + arrText[n];
-//     var metrics = ctx.measureText(testLine);
-//     var testWidth = metrics.width;
-//     if (testWidth > width && n > 0) {
-//       result.push({line, top, left});
-//       line = arrText[n];
-//       top += lineHeight;
-//     } else {
-//       line = testLine;
-//     }
-//   }
-//   result.push({line, top, left});
-//   return result;
-// }
-
-/**
  * 设置一些基础默认值
  *
  * @param {Object} config JSON配置
