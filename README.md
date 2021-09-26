@@ -1,4 +1,4 @@
-# json2canvas
+# html-json2canvas
 Generate image with json data by canvas https://json2canvas.netlify.com/
 
 ## Installation
@@ -6,7 +6,7 @@ Generate image with json data by canvas https://json2canvas.netlify.com/
 You can install it with npm or `<script>`:
 
 ```bash
-npm install json2canvas --save-dev
+npm install html-json2canvas --save-dev
 ```
 
 ```html
