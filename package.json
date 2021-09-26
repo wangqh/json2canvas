@@ -1,5 +1,5 @@
 {
-  "name": "json2canvas",
+  "name": "@chanh/json2canvas",
   "version": "1.0.0-alpha.0",
   "description": "generate image with json data by canvas",
   "main": "dist/json2canvas.umd.min.js",
