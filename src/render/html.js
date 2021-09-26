@@ -85,7 +85,7 @@ export default class HTMLRender extends Render {
   // 绘制图片
   image ({ url, y, x, css }) {
 
-    const { width, height, radius } = css || {}
+    const { width, height, radius, opacity } = css || {}
     const {ctx} = this;
 
     return new Promise((resolve, reject) => {
@@ -103,9 +103,11 @@ export default class HTMLRender extends Render {
         } else if(!width) {
           width = img.width / img.height * height;
         } else if(!height) {
-          height = img.height / img.widht * width;
+          height = img.height / img.width * width;
         }
-        
+        if (opacity) {
+          ctx.globalAlpha = opacity
+        }
         ctx.drawImage(img, x, y, width, height);
         img.parentNode.removeChild(img);
         ctx.restore()

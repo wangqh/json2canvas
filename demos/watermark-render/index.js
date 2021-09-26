@@ -117,7 +117,6 @@ function getWatermarkTemplateConfigById (id) {
           textAlign: 'center'
         },
         itemType: 'group',
-        itemGroupIsLast: true,
         itemGroupOrder: 3,
         itemMaxCount: 1,
         children: [
@@ -137,28 +136,6 @@ function getWatermarkTemplateConfigById (id) {
       }
     ]
   };
-}
-
-function custom(ctx, config) {
-  ctx.save()
-  ctx.beginPath();
-  const offsetX1 = (config.css.marginLeft || 0) + config.css.padding[3];
-  const offsetX2 = (config.css.marginRight || 0) + config.css.padding[1];
-  const offsetY1 = (config.css.marginTop || 0) + config.css.padding[0];
-  const offsetY2 = (config.css.marginBottom || 0) + config.css.padding[2];
-  ctx.moveTo(config.x - offsetX1, config.y - offsetY1);
-  ctx.lineTo(config.x - offsetX1, config.y + config.css.height + offsetY2);
-  ctx.lineTo(config.x + config.css.width + offsetX2, config.y + config.css.height + offsetY2);
-  ctx.lineTo(config.x + config.css.width + offsetX2, config.y - offsetY1);
-  ctx.lineTo(config.x - offsetX1, config.y - offsetY1);
-  
-  if (this.boxShow) {
-    ctx.strokeStyle = "#fff"
-    ctx.stroke();
-  }
-  ctx.closePath();
-  ctx.restore()
-  
 }
 
 function setWatermarkConfig (templateConfig) {
@@ -204,15 +181,18 @@ function setWatermarkTemplateStyleConfig (templateConfig, watermarkStyle) {
 
 function setWatermarkItemsConfig (templateConfig, watermarkItemList) {
   if (!templateConfig) {
-    return null
+    throw new Error('模板配置不能为空')
   }
   const itemGroupList = recursionGetWatermarkTemplateItemGroupsConfig(templateConfig)
     .sort((a, b) => a.itemGroupOrder - b.itemGroupOrder)
-  const lastItemGroup = itemGroupList.pop()
+  if (!itemGroupList.length) {
+    throw new Error('模板配置无可用空间')
+  }
+  const lastItemGroup = itemGroupList.slice(-1)[0]
   const lastItemGroupIsLimit = lastItemGroup.itemMaxCount === 1
 
   if (lastItemGroupIsLimit && watermarkItemList.length >= itemGroupList.length) {
-    resetWatermarkTemplateItems(lastItemGroup, [watermarkItemList.pop()])
+    resetWatermarkTemplateItems(itemGroupList.pop(), [watermarkItemList.pop()])
   }
 
 
