@@ -10,15 +10,15 @@ const {
   setOrigin,
 } = utils;
 
-function generator({ ratio, render = 'html', config }) {
+function generator({ config, width, height, ratio, render = 'html' }) {
   const defaultConfig = setDefaultConfig(config || {});
   const inlineBlockConfig = setInlineBlock(defaultConfig);
   const widthConfig = setWidth(inlineBlockConfig, null);
   const heightConfig = setHeight(widthConfig);
   const originConfig = setOrigin(heightConfig);
   const Render = isFunction(render) ? render : (Renders[render] || Renders.html);
-  const width = widthConfig.css.layerWidth || 200
-  const height = heightConfig.css.layerHeight || 100
+  width =  width || widthConfig.css.layerWidth || 200
+  height = height || heightConfig.css.layerHeight ||  100
   render = new Render(width,  height, {ratio});
 
   const { canvas } = render
