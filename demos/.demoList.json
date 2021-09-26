@@ -1,5 +1,9 @@
 [
   {
+    "label": "基本用法",
+    "src": "simple"
+  },
+  {
     "label": "水印模板预览",
     "src": "watermark-template-preview"
   },

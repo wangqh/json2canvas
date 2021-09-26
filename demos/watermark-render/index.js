@@ -1,7 +1,7 @@
 const templateId = 'testwet234234324'
 const watermarkStyle = {
-  width: 300,
-  opacity: 0.7,
+  width: 194,
+  opacity: 0.5,
   themeColor: '#268dff'
 }
 const watermarkItemList = [
@@ -23,7 +23,7 @@ const watermarkItemList = [
   {
     code: 'time',
     label: '拍摄时间',
-    value: '2021-09-10 17：34'
+    value: '2021-09-10 17:34'
   }
 ];
 
@@ -35,8 +35,8 @@ function getWatermarkTemplateConfigById (id) {
     themeColorCss: ['backgroundColor'],
     resettableCss: ['width'],
     css: {
-      width: 300,
-      radius: 20
+      width: 194,
+      radius: 2
     },
     afterClip: true,
     children: [
@@ -44,9 +44,9 @@ function getWatermarkTemplateConfigById (id) {
         type: 'div',
         resettableCss: ['backgroundColor', 'opacity'],
         css: {
-          padding: [5, 16, 5, 16],
+          padding: [8, 16, 8, 16],
           backgroundColor: '#268dff',
-          opacity: 0.5,
+          opacity: 0.7,
           textAlign: 'center'
         },
         itemType: 'group',
@@ -59,9 +59,9 @@ function getWatermarkTemplateConfigById (id) {
             itemType: 'value',
             text: '工程记录示例',
             css: {
-              lineHeight: 30,
+              lineHeight: 20,
               display: 'inline-block',
-              color: '#fff', fontSize: 18
+              color: '#fff', fontSize: 14
             }
           }
         ]
@@ -70,9 +70,9 @@ function getWatermarkTemplateConfigById (id) {
         type: 'div',
         resettableCss: ['opacity'],
         css: {
-          padding: [5, 16, 5, 16],
+          padding: [6, 8, 6, 8],
           backgroundColor: '#FFF',
-          opacity: 0.5
+          opacity: 0.7
         },
         itemType: 'group',
         itemGroupOrder: 2,
@@ -81,7 +81,7 @@ function getWatermarkTemplateConfigById (id) {
           {
             type: 'div',
             css: {
-              padding: [5, 8, 5, 8]
+              padding: [5, 0, 5, 0]
             },
             children: [
               {
@@ -91,7 +91,7 @@ function getWatermarkTemplateConfigById (id) {
                 text: '拍摄时间：',
                 css: {
                   width: 80,
-                  color: '#fff', fontSize: 14, lineHeight: 20, textAlign: 'right', display: 'inline-block'
+                  color: '#1f1f1f', fontSize: 13, lineHeight: 20, textAlign: 'right', display: 'inline-block'
                 }
               },
               {
@@ -100,7 +100,7 @@ function getWatermarkTemplateConfigById (id) {
                 itemType: 'value',
                 text: '2021-09-09 19:27',
                 css: {
-                  color: '#fff', fontSize: 14, lineHeight: 20, display: 'inline-block'
+                  color: '#1f1f1f', fontSize: 13, lineHeight: 20, display: 'inline-block'
                 }
               }
             ]
@@ -111,9 +111,9 @@ function getWatermarkTemplateConfigById (id) {
         type: 'div',
         resettableCss: ['backgroundColor', 'opacity'],
         css: {
-          padding: [5, 16, 5, 16],
+          padding: [8, 16, 8, 16],
           backgroundColor: '#268dff',
-          opacity: 0.5,
+          opacity: 0.7,
           textAlign: 'center'
         },
         itemType: 'group',
@@ -127,10 +127,10 @@ function getWatermarkTemplateConfigById (id) {
             itemType: 'value',
             text: '施工区域示例',
             css: {
-              lineHeight: 30,
+              lineHeight: 20,
               display: 'inline-block',
               color: '#fff', 
-              fontSize: 18
+              fontSize: 14
             }
           }
         ]
@@ -292,8 +292,7 @@ function resetItemConfig (itemConfig, itemData) {
   const templateConfig = getWatermarkTemplateConfigById(templateId);
   const config = setWatermarkConfig(templateConfig)
   const options = {
-    width: 300,
-    height: 400,
+    ratio: 2,
     config
   }
   const canvas = await json2canvas(options);

@@ -142,7 +142,6 @@ const setInlineBlock = function (config) {
           },
           children: item.map(d => setInlineBlock(arr[d])),
         };
-        console.log(obj)
         return obj;
       }
       return setInlineBlock(arr[item]);
@@ -187,7 +186,11 @@ const getTextWidth = function (words, option, ctx) {
  * @param {Function} drawText 绘制文本方法
  * @returns {Object} 文本宽高对象
  */
-const getText = function (option, ctx, drawText) {
+let render = null
+const getText = function (option, renderType = 'html') {
+  const Render = isFunction(renderType) ? renderType : (Renders[renderType] || Renders.html);
+  render = render || new Render(10000,  10000, {});
+  const ctx = render.ctx;
   // coolzjy@v2ex 提供的正则 https://regexr.com/4f12l 优化可断行的位置
   const pattern = /\b(?![\u0020-\u002F\u003A-\u003F\u2000-\u206F\u2E00-\u2E7F\u3000-\u303F\uFF00-\uFF1F])|(?=[\u2E80-\u2FFF\u3040-\u9FFF])/g;
   let fillText = '';
@@ -226,9 +229,6 @@ const getText = function (option, ctx, drawText) {
       if (option.text[i].charCodeAt(0) === 10) {
         tempText = tempText.substring(0, tempText.length - 1);
       }
-      if (isFunction(drawText)) {
-        drawText(option, tempText, fillTop);
-      }
 
       if (lineNum === option.lineClamp && i !== option.text.length) {
         break;
@@ -246,9 +246,6 @@ const getText = function (option, ctx, drawText) {
     if (width > fillWidth) {
       fillWidth = width;
     }
-    if (isFunction(drawText)) {
-      drawText(option, fillText, fillTop);
-    }
   }
 
   return {
@@ -265,7 +262,7 @@ const getText = function (option, ctx, drawText) {
  * @param {Object} ctx canvas context
  * @returns {Object} 修改过的配置信息
  */
-const setWidth = function (config, parent, ctx) {
+const setWidth = function (config, parent) {
   const borderWidth = config.css && config.css.borderWidth ? config.css.borderWidth * 2 : 0
   const paddingWidth = config.css && config.css.padding ? config.css.padding[1] + config.css.padding[3] : 0
   // 文字可能没有宽 ，图片一定要有宽高, 宽度有最大值和继承父的宽度限定边界
@@ -273,7 +270,7 @@ const setWidth = function (config, parent, ctx) {
   if (!config.css.width) {
     if (config.type == 'text') {
       const { fontSize, fontWeight } = config.css
-      let width = getText(config, ctx).width;
+      let width = getText(config).width;
       if (parent && width > parent.css.width) {
         width = parent.css.width;
       }
@@ -287,18 +284,18 @@ const setWidth = function (config, parent, ctx) {
       config.css.width = parent.css.width - borderWidth - paddingWidth;
       if (config.children) {
         config.children.forEach(element => {
-          setWidth(element, config, ctx);
+          setWidth(element, config);
         });
       }
     } else if (children) {
       config.css.width = children.reduce((sum, item) => {
-        const res = setWidth(item, config, ctx);
+        const res = setWidth(item, config);
         return sum + res.css.width;
       }, 0);
     }
   } else if (children) {
     children.forEach(element => {
-      setWidth(element, config, ctx);
+      setWidth(element, config);
     });
   }
   const boxWidth = config.css.width + borderWidth + paddingWidth;
@@ -315,21 +312,21 @@ const setWidth = function (config, parent, ctx) {
  * @param {Object} ctx canvas context
  * @returns {Object} 修改过的配置信息
  */
-const setHeight = function (config, ctx) {
+const setHeight = function (config) {
   const children = config.children;
   if (!config.css.height) {
     if (config.type == 'text') {
-      config.css.height = getText(config, ctx).height;
+      config.css.height = getText(config).height;
     }
     // div含有子节点继承父节点的高度 行内元素取行内元素里面的最大高度
     else if (children) {
       let inlineBlockMax = 0;
       let height = children.reduce((sum, item) => {
         if (item.css.display !== 'inline-block') {
-          const res = setHeight(item, ctx);
+          const res = setHeight(item);
           return sum + res.css.layerHeight;
         } else {
-          inlineBlockMax = Math.max(inlineBlockMax, setHeight(item, ctx).css.height);
+          inlineBlockMax = Math.max(inlineBlockMax, setHeight(item).css.height);
           return sum;
         }
       }, 0);
@@ -337,7 +334,7 @@ const setHeight = function (config, ctx) {
     }
   } else if (children) {
     children.forEach(element => {
-      setHeight(element, ctx);
+      setHeight(element);
     });
   }
   let boxHeight = config.css.borderWidth ? config.css.height + config.css.borderWidth * 2 : config.css.height;
@@ -400,9 +397,9 @@ const setOrigin = function (config) {
  * @param {Object} ctx canvas context
  * @param {Function} drawText 绘制文本方法
  */
-const drawParagraph = function (config, ctx, drawText) {
-  getText(config, ctx, drawText);
-}
+// const drawParagraph = function (config, ctx, drawText) {
+//   getText(config, ctx, drawText);
+// }
 
 /**
  * 绘制图片(方、圆角、圆)
@@ -411,16 +408,16 @@ const drawParagraph = function (config, ctx, drawText) {
  * @param {Function} drawText 绘制文本方法
  * @param {Function} drawRect 绘制矩形方法
  */
-const drawImage = async function (config, ctx, drawImg, drawRect) {
-  if (ctx) {
-    const { url, x, y, css: { width, height } } = config
-    if (css.radius) {
-      await drawRoundedRectangle(config, ctx, drawRect);
-      ctx.clip();
-    }
-    await drawImg({url, top: y, left: x, width, height});
-  }
-}
+// const drawImage = async function (config, ctx, drawImg, drawRect) {
+//   if (ctx) {
+//     const { url, x, y, css: { width, height } } = config
+//     if (css.radius) {
+//       await drawRoundedRectangle(config, ctx, drawRect);
+//       ctx.clip();
+//     }
+//     await drawImg({url, top: y, left: x, width, height});
+//   }
+// }
 
 /**
  * 绘制圆角矩形
@@ -428,38 +425,38 @@ const drawImage = async function (config, ctx, drawImg, drawRect) {
  * @param {Object} ctx canvas context
  * @param {Function} drawRect 绘制矩形方法
  */
-const drawRoundedRectangle = async function (config, ctx, drawRect) {
-  const borderWidth = config.css.borderWidth || 0
-  const rectOptions = {
-    left: config.x - config.css.padding[3],
-    top: config.y - config.css.padding[0],
-    width: config.css.boxWidth - borderWidth * 2,
-    height: config.css.boxHeight - borderWidth * 2,
-    round: config.css.radius || 0,
-    fillStyle: config.css.backgroundColor,
-    alpha: config.css.opacity,
-    strokeStyle: config.css.borderColor,
-    lineStyle: config.css.borderStyle,
-    lineWidth: borderWidth
-  };
-  if (rectOptions.fillStyle) {
-    if (Array.isArray(rectOptions.fillStyle)) {
-      var gr =
-        config.direction == 'vertical'
-          ? ctx.createLinearGradient(0, 0, 0, config.css.layerHeight)
-          : ctx.createLinearGradient(0, 0, config.css.layerWidth, 0);
-      rectOptions.fillStyle.forEach(item => {
-        gr.addColorStop(item.scale, item.val);
-      });
-      rectOptions.fillStyle = gr;
-    }
-  }
-  await drawRect(rectOptions)
+// const drawRoundedRectangle = async function (config, ctx, drawRect) {
+//   const borderWidth = config.css.borderWidth || 0
+//   const rectOptions = {
+//     left: config.x - config.css.padding[3],
+//     top: config.y - config.css.padding[0],
+//     width: config.css.boxWidth - borderWidth * 2,
+//     height: config.css.boxHeight - borderWidth * 2,
+//     round: config.css.radius || 0,
+//     fillStyle: config.css.backgroundColor,
+//     alpha: config.css.opacity,
+//     strokeStyle: config.css.borderColor,
+//     lineStyle: config.css.borderStyle,
+//     lineWidth: borderWidth
+//   };
+//   if (rectOptions.fillStyle) {
+//     if (Array.isArray(rectOptions.fillStyle)) {
+//       var gr =
+//         config.direction == 'vertical'
+//           ? ctx.createLinearGradient(0, 0, 0, config.css.layerHeight)
+//           : ctx.createLinearGradient(0, 0, config.css.layerWidth, 0);
+//       rectOptions.fillStyle.forEach(item => {
+//         gr.addColorStop(item.scale, item.val);
+//       });
+//       rectOptions.fillStyle = gr;
+//     }
+//   }
+//   await drawRect(rectOptions)
 
-  if (config.afterClip) {
-    ctx.clip()
-  }
-}
+//   if (config.afterClip) {
+//     ctx.clip()
+//   }
+// }
 
 export default {
   getTextWidth,
@@ -470,8 +467,5 @@ export default {
   setInlineBlock,
   setWidth,
   setHeight,
-  setOrigin,
-  drawParagraph,
-  drawImage,
-  drawRoundedRectangle
+  setOrigin
 };
