@@ -58,7 +58,7 @@ export default class HTMLRender extends Render {
 
     ctx.save();
     ctx.fillStyle = fillStyle;
-    if (opacity) {
+    if (opacity >= 0) {
       ctx.globalAlpha = opacity
     }
     ctx.beginPath();
@@ -105,7 +105,7 @@ export default class HTMLRender extends Render {
         } else if(!height) {
           height = img.height / img.width * width;
         }
-        if (opacity) {
+        if (opacity >= 0) {
           ctx.globalAlpha = opacity
         }
         ctx.drawImage(img, x, y, width, height);

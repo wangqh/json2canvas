@@ -162,7 +162,7 @@ function setWatermarkTemplateStyleConfig (templateConfig, watermarkStyle) {
   function recursionSetWatermarkTemplateStyle (templateConfig) {
     if (Array.isArray(templateConfig.resettableCss)) {
       templateConfig.resettableCss.forEach(cssProp => {
-        if (watermarkStyle[cssProp]) {
+        if (watermarkStyle[cssProp] !== undefined) {
           templateConfig.css[cssProp] = watermarkStyle[cssProp]
         }
       })

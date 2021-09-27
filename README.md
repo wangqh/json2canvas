@@ -1,6 +1,6 @@
 # html-json2canvas
 
-基于类 html 语法的 JSON 配置，使用 Canvas 绘制网页图片 https://json2canvas.netlify.com/
+基于类 html 语法的 JSON 配置，使用 Canvas 绘制网页图片 <https://json2canvas.netlify.app/>
 
 ## 安装
 
@@ -11,7 +11,7 @@ npm install html-json2canvas
 ```
 
 ```html
-<script src="https://unpkg/json2canvas/dist/json2canvas.umd.min.js"></script>
+<script src="./dist/json2canvas.umd.min.js"></script>
 ```
 
 ## 用法
@@ -170,7 +170,7 @@ const options = {
 
 run npm start and open http://localhost:3000
 
-online example: https://json2canvas.netlify.com/
+online example: <https://json2canvas.netlify.app/>
 
 ## License
 
