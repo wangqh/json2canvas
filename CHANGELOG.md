@@ -1,3 +1,12 @@
+## [1.0.1](https://github.com/wangqh/json2canvas/compare/1.0.0...1.0.1) (2021-09-27)
+
+
+### Bug Fixes
+
+* 透明度为0时无效问题 ([97595e4](https://github.com/wangqh/json2canvas/commit/97595e40be3754628d90f45541bbb72286e99041))
+
+
+
 # 1.0.0 (2021-09-26)
 
 
