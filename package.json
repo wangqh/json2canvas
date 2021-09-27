@@ -18,8 +18,8 @@
     "demo:dev": "demosify --serve",
     "demo:prod": "demosify --prod",
     "preversion": "npm run build",
-    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
-    "postversion": "git push && git push --tags"
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "postversion": "git add CHANGELOG.md && git push && git push --tags"
   },
   "repository": {
     "type": "git",
