@@ -1,7 +1,7 @@
 {
   "name": "html-json2canvas",
   "version": "1.0.1",
-  "description": "generate image with json data by canvas",
+  "description": "基于JSON配置，使用 Canvas 绘制网页界面",
   "main": "dist/json2canvas.umd.min.js",
   "directories": {
     "dist": "dist"
