@@ -8,7 +8,6 @@ const options = {
       width: 200,
       radius: 10,
     },
-    afterClip: true,
     children: [
       {
         type: "div",

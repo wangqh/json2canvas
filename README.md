@@ -29,7 +29,6 @@ const options = {
       width: 200,
       radius: 10,
     },
-    afterClip: true,
     children: [
       {
         type: "div",
@@ -130,7 +129,6 @@ const options = {
     opacity: 0.7,
     textAlign: 'center'
   },
-  afterClip: true, // 圆角时截取所有子元素
   children: []
 }
 ```
@@ -166,6 +164,40 @@ const options = {
   }
 }
 ```
+
+#### wrapText
+
+```js
+{
+  type: 'wrapText',
+  text: '',
+  css: {
+    color: '#1f1f1f',
+    fontSize: 14,
+    lineHeight: 20,
+    width: 200, // 到宽度边界时换行
+    height: 80, // 超过高度会截取掉
+    textAlign: 'right',
+    display: 'inline-block'
+  }
+}
+```
+
+#### custom function
+
+```js
+{
+  type: function ({ x, y, url, css }) {
+    const { ctx, canvas, ratio } = this
+  },
+  x: 0,
+  y: 0,
+  url: '',
+  // text: '',
+  css: {}
+}
+```
+> 自定义函数类型：可使用canvas API自由绘制一些基本类型不能满足的或者复杂的元素
 
 ## Example
 

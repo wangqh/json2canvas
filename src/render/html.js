@@ -29,8 +29,8 @@ export default class HTMLRender extends Render {
   } 
 
   // 绘制 DIV 元素
-  div ({y, x, css, afterClip }) {
-    const { padding, width, height, borderWidth = 0, radius = 0, backgroundColor, opacity, borderColor, borderStyle } = css || {}
+  div ({y, x, css, _clipChildrenStart, _clipChildrenEnd }) {
+    const { padding = [0,0,0,0], width, height, borderWidth = 0, radius = 0, backgroundColor, opacity, borderColor, borderStyle } = css || {}
 
     const r = radius
     const w = width + padding[1] + padding[3]
@@ -56,6 +56,10 @@ export default class HTMLRender extends Render {
       if (h < 2 * r) r = h / 2;
     }
 
+    if (_clipChildrenEnd) {
+      ctx.restore()
+    }
+
     ctx.save();
     ctx.fillStyle = fillStyle;
     if (opacity >= 0) {
@@ -74,19 +78,24 @@ export default class HTMLRender extends Render {
     borderWidth && ctx.stroke()
     ctx.closePath();
     ctx.restore();
-
-    if (afterClip) {
+    if (_clipChildrenStart) {
+      ctx.save()
       ctx.clip()
     }
+
 
     return Promise.resolve(this);
   }
 
   // 绘制图片
-  image ({ url, y, x, css }) {
+  image ({ url, y, x, css, _clipChildrenEnd }) {
 
-    const { width, height, radius, opacity } = css || {}
+    let { width, height, radius, opacity } = css || {}
     const {ctx} = this;
+
+    if (_clipChildrenEnd) {
+      ctx.restore()
+    }
 
     return new Promise((resolve, reject) => {
       ctx.save();
@@ -94,8 +103,8 @@ export default class HTMLRender extends Render {
         this.div({x, y, css })
         ctx.clip();
       }
-      const img = document.createElement('img');
-      img.crossOrigin = '*';
+      const img = new Image();
+      img.setAttribute('crossOrigin', 'Anonymous');
       img.onload = function() {
         if(!width && !height) {
           width = img.width;
@@ -109,20 +118,22 @@ export default class HTMLRender extends Render {
           ctx.globalAlpha = opacity
         }
         ctx.drawImage(img, x, y, width, height);
-        img.parentNode.removeChild(img);
         ctx.restore()
         resolve();
       }
       img.onerror = reject;
       img.src = url;
-      document.body.appendChild(img);
     })
   }
 
   // 绘制文字
-  text({ text, x, y, css }) {
+  text({ text, x, y, css, _clipChildrenEnd }) {
     const { fontSize, lineHeight, color, textAlign, fontWeight, width, deorationLine } = css || {}
     const {ctx} = this;
+
+    if (_clipChildrenEnd) {
+      ctx.restore()
+    }
 
     ctx.save();
     ctx.font = [fontWeight, fontSize ? fontSize + 'px' : '', 'Arial'].filter(v => v).join(' ');
@@ -154,9 +165,13 @@ export default class HTMLRender extends Render {
   }
 
   // 绘制多行文字
-  wrapText({text, x, y, css }) {
+  wrapText({text, x, y, css, _clipChildrenEnd }) {
     const { fontSize, lineHeight, color, width, height, textAlign, fontWeight } = css || {}
     const {ctx} = this; 
+
+    if (_clipChildrenEnd) {
+      ctx.restore()
+    }
     
     ctx.save();
     ctx.font = [fontWeight, fontSize ? fontSize + 'px' : '', 'Arial'].filter(v => v).join(' ');

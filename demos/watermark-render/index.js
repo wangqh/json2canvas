@@ -38,7 +38,6 @@ function getWatermarkTemplateConfigById (id) {
       width: 194,
       radius: 2
     },
-    afterClip: true,
     children: [
       {
         type: 'div',

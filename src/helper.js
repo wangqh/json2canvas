@@ -146,6 +146,12 @@ const getText = function (option, renderType = 'html') {
   let lineNum = 1;
   //利用正则获取可断行的下标
   let breakLines = [];
+  if (!option.text) {
+    return {
+      width: fillWidth,
+      height: fillTop
+    }
+  }
   option.text.replace(pattern, function() {
     breakLines.push(arguments[arguments.length - 2] - 1);
   });
@@ -302,6 +308,7 @@ const setOrigin = function (config) {
   const children = config.children;
   const borderWidth = config.css.borderWidth || 0
   const padding = config.css.padding
+  config._clipChildrenStart = !!config.css.radius
   if (children) {
     let prev = {}; //上一个相邻节点的位置
     const childrenWidth = children.reduce((sum, item) => {
@@ -309,20 +316,19 @@ const setOrigin = function (config) {
     }, 0)
     for (let i = 0; i < children.length; i++) {
       const item = children[i];
+      if (prev._clipChildrenStart) {
+        item._clipChildrenEnd = true
+      }
       item.x = (item.css.marginLeft || 0);
       item.y = (item.css.marginTop || 0);
       // 父节点下的第一个元素相对于父节点0，0
       if (i == 0) {
         item.x += config.x + borderWidth + padding[3];
         item.y += config.y + borderWidth + padding[0];
-        if (config.css.textAlign === 'center' && item.type === 'text') {
-          item.x += (config.css.width - childrenWidth) / 2
-        }
-        if (item.css.textAlign === 'right') {
-          item.x += item.css.width - item.css.width
-        }
+      } else if (item.css.position === 'absolute') {
+        item.x += config.x + borderWidth + (item.css.left || 0);
+        item.y += config.y + borderWidth + (item.css.top || 0);
       } else {
-        const prevBorderWidth = prev.css.borderWidth || 0
         // first block
         if (item.css.display !== 'inline-block' || prev.css.display !== 'inline-block') {
           item.x += config.x + borderWidth + padding[3];
@@ -332,78 +338,15 @@ const setOrigin = function (config) {
           item.y += config.y;
         }
       }
+      if (i == 0 && config.css.textAlign === 'center' && item.type === 'text') {
+        item.x += (config.css.width - childrenWidth) / 2
+      }
       prev = item;
       setOrigin(item);
     }
     return config;
   }
 }
-/**
- * 绘制单行多行片段
- * @param {Object} config JOSN中的文本配置
- * @param {Object} ctx canvas context
- * @param {Function} drawText 绘制文本方法
- */
-// const drawParagraph = function (config, ctx, drawText) {
-//   getText(config, ctx, drawText);
-// }
-
-/**
- * 绘制图片(方、圆角、圆)
- * @param {Object} config 单个定义的image对象
- * @param {Object} ctx canvas context
- * @param {Function} drawText 绘制文本方法
- * @param {Function} drawRect 绘制矩形方法
- */
-// const drawImage = async function (config, ctx, drawImg, drawRect) {
-//   if (ctx) {
-//     const { url, x, y, css: { width, height } } = config
-//     if (css.radius) {
-//       await drawRoundedRectangle(config, ctx, drawRect);
-//       ctx.clip();
-//     }
-//     await drawImg({url, top: y, left: x, width, height});
-//   }
-// }
-
-/**
- * 绘制圆角矩形
- * @param {Object} config 单个定义的div对象
- * @param {Object} ctx canvas context
- * @param {Function} drawRect 绘制矩形方法
- */
-// const drawRoundedRectangle = async function (config, ctx, drawRect) {
-//   const borderWidth = config.css.borderWidth || 0
-//   const rectOptions = {
-//     left: config.x - config.css.padding[3],
-//     top: config.y - config.css.padding[0],
-//     width: config.css.boxWidth - borderWidth * 2,
-//     height: config.css.boxHeight - borderWidth * 2,
-//     round: config.css.radius || 0,
-//     fillStyle: config.css.backgroundColor,
-//     alpha: config.css.opacity,
-//     strokeStyle: config.css.borderColor,
-//     lineStyle: config.css.borderStyle,
-//     lineWidth: borderWidth
-//   };
-//   if (rectOptions.fillStyle) {
-//     if (Array.isArray(rectOptions.fillStyle)) {
-//       var gr =
-//         config.direction == 'vertical'
-//           ? ctx.createLinearGradient(0, 0, 0, config.css.layerHeight)
-//           : ctx.createLinearGradient(0, 0, config.css.layerWidth, 0);
-//       rectOptions.fillStyle.forEach(item => {
-//         gr.addColorStop(item.scale, item.val);
-//       });
-//       rectOptions.fillStyle = gr;
-//     }
-//   }
-//   await drawRect(rectOptions)
-
-//   if (config.afterClip) {
-//     ctx.clip()
-//   }
-// }
 
 export default {
   getTextWidth,

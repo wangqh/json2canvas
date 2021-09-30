@@ -4,11 +4,11 @@
     "src": "simple"
   },
   {
-    "label": "水印模板预览",
-    "src": "watermark-template-preview"
+    "label": "图片类型示例",
+    "src": "custom_type"
   },
   {
-    "label": "H5水印渲染",
+    "label": "动态水印示例",
     "src": "watermark-render"
   }
 ]
