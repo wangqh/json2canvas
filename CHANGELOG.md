@@ -1,3 +1,12 @@
+## [1.0.2](https://github.com/wangqh/json2canvas/compare/1.0.1...1.0.2) (2021-09-30)
+
+
+### Features
+
+* 增加绘制图片类型Demo ([b426eaf](https://github.com/wangqh/json2canvas/commit/b426eafaddfeca15fc14a2bf9661a6f876cb399b))
+
+
+
 ## [1.0.1](https://github.com/wangqh/json2canvas/compare/1.0.0...1.0.1) (2021-09-27)
 
 

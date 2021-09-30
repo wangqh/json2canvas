@@ -1,6 +1,6 @@
 {
   "name": "html-json2canvas",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "基于JSON配置，使用 Canvas 绘制网页界面",
   "main": "dist/json2canvas.umd.min.js",
   "directories": {
