@@ -88,6 +88,7 @@ function getWatermarkTemplateConfigById (id) {
                 itemCode: 'time',
                 itemType: 'label',
                 text: '拍摄时间：',
+                resettableCss: ['width'],
                 css: {
                   width: 80,
                   color: '#1f1f1f', fontSize: 13, lineHeight: 20, textAlign: 'right', display: 'inline-block'
@@ -98,7 +99,9 @@ function getWatermarkTemplateConfigById (id) {
                 itemCode: 'time',
                 itemType: 'value',
                 text: '2021-09-09 19:27',
+                resettableCss: ['width'],
                 css: {
+                  width: 98,
                   color: '#1f1f1f', fontSize: 13, lineHeight: 20, display: 'inline-block'
                 }
               }
@@ -155,26 +158,49 @@ function setWatermarkTemplateStyleConfig (templateConfig, watermarkStyle) {
       })
   }
 
+  const rootConfig = templateConfig
+  const rootConfigWidth = rootConfig.css.width
 
-  recursionSetWatermarkTemplateStyle(templateConfig)
+  if (!rootConfigWidth) {
+    throw new Error('模板配置根元素必须设置宽度！')
+  }
+
+  recursionSetWatermarkTemplateStyle(templateConfig, 0)
   
-  function recursionSetWatermarkTemplateStyle (templateConfig) {
+  function recursionSetWatermarkTemplateStyle (templateConfig, offsetWidth) {
+    offsetWidth += templateConfig.css.padding ? (templateConfig.css.padding[1] + templateConfig.css.padding[3]) : 0
     if (Array.isArray(templateConfig.resettableCss)) {
       templateConfig.resettableCss.forEach(cssProp => {
-        if (watermarkStyle[cssProp] !== undefined) {
-          templateConfig.css[cssProp] = watermarkStyle[cssProp]
+        let styleCssValue = watermarkStyle[cssProp]
+        if (styleCssValue !== undefined) {
+          if (cssProp === 'width') {
+            styleCssValue = computedResettableWidth(templateConfig, rootConfig, rootConfigWidth, styleCssValue, offsetWidth)
+          }
+          templateConfig.css[cssProp] = styleCssValue
         }
       })
     }
-  
+
     templateConfig.children && templateConfig.children.forEach(
       config => {
-        recursionSetWatermarkTemplateStyle(config)
+        recursionSetWatermarkTemplateStyle(config, offsetWidth)
       }
     )
   }
 
   return templateConfig
+}
+
+function computedResettableWidth (templateConfig, rootConfig, rootConfigWidth, newRootWidth, offsetWidth) {
+  const isNotRoot = templateConfig !== rootConfig
+  rootConfigWidth -= offsetWidth
+  newRootWidth -= offsetWidth
+  const isChangedStyleWidth = newRootWidth !== rootConfigWidth
+  let configWidth = templateConfig.css.width
+  if (configWidth && isChangedStyleWidth) {
+    configWidth = isNotRoot ? ((configWidth / rootConfigWidth) * newRootWidth) : newRootWidth
+  }
+  return configWidth
 }
 
 

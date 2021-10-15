@@ -222,7 +222,6 @@ const setWidth = function (config, parent) {
   const children = config.children;
   if (!config.css.width) {
     if (config.type == 'text') {
-      const { fontSize, fontWeight } = config.css
       let width = getText(config).width;
       if (parent && width > parent.css.width) {
         width = parent.css.width;
