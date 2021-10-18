@@ -13,7 +13,7 @@ const watermarkItemList = [
   {
     code: 'location',
     label: '施工区域',
-    value: '一楼卫生间'
+    value: '一楼卫生间一楼卫生间一楼卫生间一楼卫生间一楼卫生间一楼卫生间一楼卫生间'
   },
   {
     code: 'location2',
@@ -88,20 +88,21 @@ function getWatermarkTemplateConfigById (id) {
                 itemCode: 'time',
                 itemType: 'label',
                 text: '拍摄时间：',
-                resettableCss: ['width'],
+                // resettableCss: ['width'],
                 css: {
-                  width: 80,
+                  width: 88,
                   color: '#1f1f1f', fontSize: 13, lineHeight: 20, textAlign: 'right', display: 'inline-block'
                 }
               },
               {
-                type: 'text',
+                type: 'wrapText',
                 itemCode: 'time',
                 itemType: 'value',
                 text: '2021-09-09 19:27',
                 resettableCss: ['width'],
                 css: {
-                  width: 98,
+                  width: 90,
+                  lineClamp: 4,
                   color: '#1f1f1f', fontSize: 13, lineHeight: 20, display: 'inline-block'
                 }
               }
@@ -181,11 +182,22 @@ function setWatermarkTemplateStyleConfig (templateConfig, watermarkStyle) {
       })
     }
 
-    templateConfig.children && templateConfig.children.forEach(
-      config => {
-        recursionSetWatermarkTemplateStyle(config, offsetWidth)
-      }
-    )
+    if (templateConfig.children) {
+      offsetWidth = templateConfig.children.reduce((prev, item) => {
+        const isNotResettableWidth = !Array.isArray(item.resettableCss) || !item.resettableCss.includes('width')
+        if (item.css.display === 'inline-block' && isNotResettableWidth) {
+          prev += item.css.width || 0
+        }
+        return prev
+      }, offsetWidth)
+  
+      templateConfig.children.forEach(
+        config => {
+          recursionSetWatermarkTemplateStyle(config, offsetWidth)
+        }
+      )
+    }
+
   }
 
   return templateConfig
@@ -258,17 +270,20 @@ function recursionGetWatermarkTemplateItemGroupsConfig (templateConfig) {
 function resetWatermarkTemplateItems (group, itemsData) {
   const newGroupChildren = []
   const groupChildren = group.children
+  const itemsTypes = ['text', 'wrapText']
   
   itemsData.forEach(itemData => {
     let itemConfig = []
-    let itemRowConfig = []
-    if (groupChildren[0].type === 'text') {
+    let itemRowConfig = {}
+    if (itemsTypes.includes(groupChildren[0].type)) {
       itemConfig = resetItemConfig(groupChildren, itemData)
       newGroupChildren.push(...itemConfig)
-    } else if (groupChildren[0].children[0].type === 'text') {
+    } else if (itemsTypes.includes(groupChildren[0].children[0].type)) {
+      const itemRowConfigCss = groupChildren[0].css
       itemConfig = resetItemConfig(groupChildren[0].children, itemData)
       itemRowConfig = {
         ...groupChildren[0],
+        css: { ...itemRowConfigCss },
         children: itemConfig
       }
       newGroupChildren.push(itemRowConfig)

@@ -28,7 +28,7 @@ const setDefaultConfig = function (config) {
   config.css.padding = config.css.padding || [0, 0, 0, 0];
   config.css.textAlign = config.css.textAlign || 'left'
   // 给文字默认添加颜色,行高,最大宽度，配置
-  if (config.type == 'text') {
+  if (config.type == 'text' || config.type == 'wrapText') {
     config.css.color = config.css.color || '#ffffff';
     if (!config.css.lineHeight) {
       let result = config.css.fontSize;
@@ -120,9 +120,9 @@ const addLayerHeight = function (element, layerHeight) {
  * @returns {Object} 文本宽高对象
  */
 const getTextWidth = function (words, option, ctx) {
-  let { fontSize, fontWeight, width } = option.css || {};
+  const { fontSize, fontWeight } = option.css || {};
   ctx.font = [fontWeight, fontSize ? fontSize + 'px' : '', 'Arial'].filter(v => v).join(' ');
-  width = width || ctx.measureText(words).width;
+  const width = ctx.measureText(words).width;
   return width;
 }
 
@@ -141,6 +141,7 @@ const getText = function (option, renderType = 'html') {
   // coolzjy@v2ex 提供的正则 https://regexr.com/4f12l 优化可断行的位置
   const pattern = /\b(?![\u0020-\u002F\u003A-\u003F\u2000-\u206F\u2E00-\u2E7F\u3000-\u303F\uFF00-\uFF1F])|(?=[\u2E80-\u2FFF\u3040-\u9FFF])/g;
   let fillText = '';
+  let wrapText = ''
   let fillTop = option.css.lineHeight; // 返回实际换行后的高度
   let fillWidth = 0; // 返回实际换行后的宽度
   let lineNum = 1;
@@ -166,7 +167,7 @@ const getText = function (option, renderType = 'html') {
     if (getTextWidth(fillText, option, ctx) > option.css.maxWidth || option.text[i].charCodeAt(0) === 10) {
       let tempText = '';
       //最大行数限制
-      if (lineNum === option.lineClamp && i !== option.text.length) {
+      if (lineNum === option.css.lineClamp && i !== option.text.length) {
         tempText = fillText.substring(0, fillText.length - 2) + '...';
         fillText = '';
       } else {
@@ -178,12 +179,14 @@ const getText = function (option, renderType = 'html') {
           fillText = fillText.substring(fillText.length - (i - tempBreakLine), fillText.length);
         }
       }
-
+      
       if (option.text[i].charCodeAt(0) === 10) {
         tempText = tempText.substring(0, tempText.length - 1);
       }
-
-      if (lineNum === option.lineClamp && i !== option.text.length) {
+      
+      wrapText += tempText
+      
+      if (lineNum === option.css.lineClamp && i !== option.text.length) {
         break;
       }
       fillTop += option.css.lineHeight || 0;
@@ -199,11 +202,13 @@ const getText = function (option, renderType = 'html') {
     if (width > fillWidth) {
       fillWidth = width;
     }
+    wrapText += fillText
   }
 
   return {
     width: fillWidth,
-    height: fillTop
+    height: fillTop,
+    wrapText
   };
 }
 
@@ -221,9 +226,9 @@ const setWidth = function (config, parent) {
   // 文字可能没有宽 ，图片一定要有宽高, 宽度有最大值和继承父的宽度限定边界
   const children = config.children;
   if (!config.css.width) {
-    if (config.type == 'text') {
+    if (config.type == 'text' || config.type == 'wrapText') {
       let width = getText(config).width;
-      if (parent && width > parent.css.width) {
+      if (parent && width > parent.css.width && config.css.display !== 'inline-block') {
         width = parent.css.width;
       }
       if (config.css.maxWidth) {
@@ -268,7 +273,11 @@ const setHeight = function (config) {
   const children = config.children;
   if (!config.css.height) {
     if (config.type == 'text') {
-      config.css.height = getText(config).height;
+      config.css.height = config.css.lineHeight;
+    } else if (config.type == 'wrapText') {
+      const { height, wrapText } = getText(config);
+      config.css.height = height
+      config.text = wrapText
     }
     // div含有子节点继承父节点的高度 行内元素取行内元素里面的最大高度
     else if (children) {

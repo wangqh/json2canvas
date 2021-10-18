@@ -174,9 +174,10 @@ const options = {
   css: {
     color: '#1f1f1f',
     fontSize: 14,
-    lineHeight: 20,
     width: 200, // 到宽度边界时换行
-    height: 80, // 超过高度会截取掉
+    height: 80, // 超过高度的文字会被截掉
+    lineHeight: 20,
+    lineClamp: 2, // 文字超过两行结尾追加"..."
     textAlign: 'right',
     display: 'inline-block'
   }
