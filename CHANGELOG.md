@@ -1,3 +1,12 @@
+## [1.0.4](https://github.com/wangqh/json2canvas/compare/1.0.3...1.0.4) (2021-10-18)
+
+
+### Bug Fixes
+
+* wrapText类型不设置高度时，动态计算高度错误，且不支持lineClamp ([dad0f75](https://github.com/wangqh/json2canvas/commit/dad0f75cea5fe76948e5d742718bf99cde8641d7))
+
+
+
 ## [1.0.3](https://github.com/wangqh/json2canvas/compare/1.0.2...1.0.3) (2021-10-15)
 
 
