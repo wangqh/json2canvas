@@ -1,3 +1,12 @@
+## [1.0.5](https://github.com/wangqh/json2canvas/compare/1.0.4...1.0.5) (2021-10-21)
+
+
+### Bug Fixes
+
+* wrapText类型的输入文字undefined时报异常问题 ([c723232](https://github.com/wangqh/json2canvas/commit/c7232324382745dd68650b4c7d42d288fe506224))
+
+
+
 ## [1.0.4](https://github.com/wangqh/json2canvas/compare/1.0.3...1.0.4) (2021-10-18)
 
 
