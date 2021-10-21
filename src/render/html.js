@@ -165,7 +165,7 @@ export default class HTMLRender extends Render {
   }
 
   // 绘制多行文字
-  wrapText({text, x, y, css, _clipChildrenEnd }) {
+  wrapText({ text = '', x, y, css, _clipChildrenEnd }) {
     const { fontSize, lineHeight, color, width, height, textAlign, fontWeight } = css || {}
     const {ctx} = this; 
 
