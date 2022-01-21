@@ -147,9 +147,15 @@ export default class HTMLRender extends Render {
     }
     ctx.textAlign = textAlign || 'left';
     ctx.textBaseline = 'middle'; // 适配安卓 ios 下的文字居中问题
-    ctx.translate(translateX, -(lineHeight / 2)); // 适配安卓 ios 下的文字居中问题
-    y += lineHeight
-    ctx.fillText(text, x, y, width);
+
+    if (textAlign === 'justify') { //两端对齐
+      y += lineHeight
+      ctx.letterSpacingText(text, x, y, (width - (text.length * fontSize)) / (text.length - 1))
+    } else {
+      ctx.translate(translateX, -(lineHeight / 2)) // 适配安卓 ios 下的文字居中问题
+      y += lineHeight
+      ctx.fillText(text, x, y, width)
+    }
     // 支持下划线
     if (deorationLine) {
       ctx.beginPath();
