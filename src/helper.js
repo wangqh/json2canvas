@@ -236,7 +236,7 @@ const setWidth = function (config, parent) {
         width = Math.min(config.css.maxWidth, width)
       }
       if (config.css.minWidth) {
-        if (width >= config.css.minWidth) {
+        if (width >= config.css.minWidth && config.css.textAlign === 'justify') {
           config.css.textAlign = 'left'
         }
         width = Math.max(config.css.minWidth, width)

@@ -1,4 +1,5 @@
 import Render from './render';
+import './utils/htmlCanvasExtends.js'
 
 export default class HTMLRender extends Render {
   constructor(width, height, {ratio}) {
