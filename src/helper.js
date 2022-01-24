@@ -37,7 +37,8 @@ const setDefaultConfig = function (config) {
       }
     }
     if (config.css.width) {
-      config.css.maxWidth = config.css.maxWidth || config.css.width;
+      config.css.maxWidth = config.css.maxWidth || config.css.width
+      config.css.minWidth = config.css.minWidth || config.css.width
     }
   }
   if (config.children) {
@@ -232,9 +233,15 @@ const setWidth = function (config, parent) {
         width = parent.css.width;
       }
       if (config.css.maxWidth) {
-        width = Math.max(config.css.maxWidth, width);
+        width = Math.min(config.css.maxWidth, width)
       }
-      config.css.width = width;
+      if (config.css.minWidth) {
+        if (width >= config.css.minWidth && config.css.textAlign === 'justify') {
+          config.css.textAlign = 'left'
+        }
+        width = Math.max(config.css.minWidth, width)
+      }
+      config.css.width = width
     }
     // div含有字节点继承父节点的宽度
     if (config.type == 'div' && parent && config.css.display !== 'inline-block') {
