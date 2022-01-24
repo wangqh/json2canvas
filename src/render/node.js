@@ -3,6 +3,7 @@ import canvas from 'canvas';
 import HTMLRender from './html';
 
 const { createCanvas, loadImage } = canvas;
+
 export default class NodeRender extends HTMLRender {
   constructor(width, height, {rate}) {
     super(width, height);
