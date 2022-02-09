@@ -1,3 +1,21 @@
+# [1.1.0-0](https://github.com/wangqh/json2canvas/compare/1.0.5...1.1.0-0) (2022-02-09)
+
+
+### Bug Fixes
+
+* 解决htmlCanvasExtends引用路径错误 ([efafa6c](https://github.com/wangqh/json2canvas/commit/efafa6ce26eefa0946cff83e1f7aa961275feb92))
+* 重复声明变量报错 ([e64b793](https://github.com/wangqh/json2canvas/commit/e64b79318878ffbdc1a4b5669da364dac81bac5e))
+
+
+### Features
+
+* 添加letterSpacingText方法，实现两端对齐效果 ([5233953](https://github.com/wangqh/json2canvas/commit/52339535ac05b0b7c9b34aefa7ba8dc889baa85e))
+* 增加支持css的textAlign: justify两端对齐配置， canvas context原型扩展letterSpacingText方法 ([4051063](https://github.com/wangqh/json2canvas/commit/4051063d399ab7aa991b247e2ecc124e241ca2a4))
+* 增加支持css的textAlign: justify两端对齐配置， canvas context原型扩展letterSpacingText方法 ([9ebd69b](https://github.com/wangqh/json2canvas/commit/9ebd69ba8627742c931b9b416747e74f26804860))
+* 增加支持css的textAlign: justify两端对齐配置， canvas context原型扩展letterSpacingText方法 ([8725a87](https://github.com/wangqh/json2canvas/commit/8725a87ae8cfcf2ccbbee270de33b1e5bc85da59))
+
+
+
 ## [1.0.5](https://github.com/wangqh/json2canvas/compare/1.0.4...1.0.5) (2021-10-21)
 
 
