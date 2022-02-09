@@ -18,7 +18,7 @@ export default class NodeRender extends HTMLRender {
   //图片
   image({url, top: y, left: x, width, height}) {
     const {ctx} = this;
-    const [x, y, width, height] = [x, y, width, height].map(v => v * this.rate);
+    [x, y, width, height] = [x, y, width, height].map(v => v * this.rate);
 
     return new Promise((resolve, reject) => {
       ctx.save();
