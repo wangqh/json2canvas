@@ -150,6 +150,7 @@ export default class HTMLRender extends Render {
     ctx.textBaseline = 'middle'; // 适配安卓 ios 下的文字居中问题
 
     if (textAlign === 'justify') { //两端对齐
+      ctx.translate(0, -(lineHeight / 2)) // 适配安卓 ios 下的文字居中问题
       y += lineHeight
       ctx.letterSpacingText(text, x, y, (width - (text.length * fontSize)) / (text.length - 1))
     } else {
