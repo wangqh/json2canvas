@@ -1,3 +1,12 @@
+# [1.1.0-1](https://github.com/wangqh/json2canvas/compare/1.1.0-0...1.1.0-1) (2022-02-11)
+
+
+### Bug Fixes
+
+* 两端对齐时适配安卓 ios 下的文字居中问题 ([9f72f44](https://github.com/wangqh/json2canvas/commit/9f72f44c2ed402aff92fb85f09d6254fb645a9d3))
+
+
+
 # [1.1.0-0](https://github.com/wangqh/json2canvas/compare/1.0.5...1.1.0-0) (2022-02-09)
 
 
